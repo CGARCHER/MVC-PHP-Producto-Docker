@@ -19,42 +19,35 @@ class configDB {
         }
      }
 
-         private function connect(){
-
-        // Render (SkySQL exige SSL)
-        $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false, // SSL sin validar CA
-        ];
-
-        self::$instance = new PDO(self::$host, self::$user, self::$pass, $options);
+     private function connect(){
+        self::$instance = new PDO(self::$host,self::$user,self::$pass);
      }
 
      private function getValues(){
         
-    // 1) Si estamos en Render, pues hay que usar variables de entorno
-      if (getenv('DB_HOST')) {
+        // 1) Si estamos en Render, pues hay que usar variables de entorno
+        if (getenv('DB_HOST')) {
 
-         $host = getenv('DB_HOST');
-         $name = getenv('DB_NAME');
-         $user = getenv('DB_USER');
-         $pass = getenv('DB_PASSWORD');
-         $port = getenv('DB_PORT') ?: 3306;
+            $host = getenv('DB_HOST');
+            $name = getenv('DB_NAME');
+            $user = getenv('DB_USER');
+            $pass = getenv('DB_PASSWORD');
+            $port = getenv('DB_PORT') ?: 3306;
 
-         // construimos el DSN igual que esta en config.ini
-         self::$host = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
-         self::$user = $user;
-         self::$pass = $pass;
+            // construimos el DSN igual que esta en config.ini
+            self::$host = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
+            self::$user = $user;
+            self::$pass = $pass;
 
-      }
-      else{
-         // 2) En local,  leer config.ini como siempre
-         $conf = parse_ini_file('config.ini');
+        }
+        else{
+            // 2) En local,  leer config.ini como siempre
+            $conf = parse_ini_file('config.ini');
 
-         self::$host = $conf['host']; 
-         self::$user = $conf['user'];
-         self::$pass = $conf['pass'];
-      }
+            self::$host = $conf['host']; 
+            self::$user = $conf['user'];
+            self::$pass = $conf['pass'];
+        }
 
      }
 

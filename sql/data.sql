@@ -7,5 +7,5 @@ CREATE TABLE `PRODUCTS` (
 
 INSERT INTO `PRODUCTS` (`cod`, `short_name`, `pvp`, `nombre`) VALUES
 (1, 'SSD', '400.00', 'BENQ'),
-(2, 'PIXEL 10', '999.99', 'dispositivo google'),
+(2, 'PIXEL 99999', '999.99', 'dispositivo google'),
 (3, 'iPad Pro', '900.00', 'Apple iPad Pro 9');

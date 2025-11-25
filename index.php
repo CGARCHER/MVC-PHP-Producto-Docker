@@ -1,4 +1,5 @@
 <?php
+require_once("config/PDO.php");
 require_once("config/config.php");
 require_once("controller/productController.php");
 
