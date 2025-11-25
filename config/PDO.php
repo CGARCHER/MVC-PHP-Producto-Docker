@@ -6,7 +6,7 @@
  * Este archivo sobrescribe la clase PDO nativa para usar MySQLi con SSL
  * Dado que con mysqli si funciona con skysql con PDO ha sido imposible que conectará, no sé rick.
  * 
- * Clase Generada solo para hacer que funcione, no es correcto hacerlo en un proyecto este cambio tan bruto
+ * FIX TEMPORAL - Clase Generada solo para hacer que funcione, no es correcto hacerlo en un proyecto este cambio tan bruto
  */
 
 class PDO {
