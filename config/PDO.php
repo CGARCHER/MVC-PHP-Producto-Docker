@@ -8,6 +8,7 @@
  * 
  * FIX TEMPORAL - Clase Generada solo para hacer que funcione, no es correcto hacerlo en un proyecto este cambio tan bruto
  */
+namespace Cgarcher\Fix\Database;
 
 class PDO {
     private $mysqli;

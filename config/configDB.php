@@ -1,4 +1,5 @@
 <?php
+use Cgarcher\Fix\Database\PDO;
 
 class configDB {
 
