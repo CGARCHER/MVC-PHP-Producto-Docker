@@ -5,12 +5,11 @@
  * Este archivo implementa clases compatibles con PDO usando MySQLi con SSL
  * Útil para conectar con SkySQL cuando PDO nativo presenta problemas
  * 
- * USO:
- * use MiApp\Database\PDO;
- * $pdo = new PDO('mysql:host=...', $user, $pass);
+ * Fix temporal by cgarcher 
+ * Parche temporal generado, pendiente de revision
  */
 
-namespace MiApp\Database;
+namespace Cgarcher\Fix\Database;
 
 class PDO {
     private $mysqli;
