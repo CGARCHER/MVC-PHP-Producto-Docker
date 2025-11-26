@@ -2,13 +2,15 @@
 /**
  * PDO.php - Wrapper MySQLi con sintaxis PDO
  * 
- *  
- * Este archivo sobrescribe la clase PDO nativa para usar MySQLi con SSL
- * Dado que con mysqli si funciona con skysql con PDO ha sido imposible que conectará, no sé rick.
+ * Este archivo implementa clases compatibles con PDO usando MySQLi con SSL
+ * Útil para conectar con SkySQL cuando PDO nativo presenta problemas
  * 
- * FIX TEMPORAL - Clase Generada solo para hacer que funcione, no es correcto hacerlo en un proyecto este cambio tan bruto
+ * USO:
+ * use MiApp\Database\PDO;
+ * $pdo = new PDO('mysql:host=...', $user, $pass);
  */
-namespace Cgarcher\Fix\Database;
+
+namespace MiApp\Database;
 
 class PDO {
     private $mysqli;
@@ -344,10 +346,10 @@ class PDOStatement {
     private $isExecuted = false;
     
     public function __construct($resource, $fetchMode = PDO::FETCH_ASSOC, $errorMode = PDO::ERRMODE_EXCEPTION) {
-        if ($resource instanceof mysqli_result) {
+        if ($resource instanceof \mysqli_result) {
             $this->result = $resource;
             $this->isExecuted = true;
-        } elseif ($resource instanceof mysqli_stmt) {
+        } elseif ($resource instanceof \mysqli_stmt) {
             $this->stmt = $resource;
         }
         
@@ -530,7 +532,7 @@ class PDOStatement {
 /**
  * PDOException compatible
  */
-class PDOException extends Exception {
+class PDOException extends \Exception {
     public $errorInfo;
     
     public function __construct($message, $code = 0, $previous = null) {
@@ -538,5 +540,3 @@ class PDOException extends Exception {
         $this->errorInfo = [$code, $code, $message];
     }
 }
-
-?>

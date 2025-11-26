@@ -1,5 +1,6 @@
 <?php
-use Cgarcher\Fix\Database\PDO;
+use MiApp\Database\PDO;
+;
 
 class configDB {
 
