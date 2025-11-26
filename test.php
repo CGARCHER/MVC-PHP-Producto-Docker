@@ -1,11 +1,7 @@
 <?php
-require_once("config/PDO.php");  // ← Así
+echo "<pre>=== TEST LOCAL → SKYSQL CON PDO NATIVO ===\n\n";
 
-use MiApp\Database\PDO;
-
-echo "<pre>=== PRUEBA DE CONEXIÓN SKYSQL CON WRAPPER PDO ===\n\n";
-
-// Configuración SkySQL (tus datos reales)
+// Configuración SkySQL
 $host = "serverless-europe-west9.sysp0000.db2.skysql.com";
 $port = 4050;
 $dbname = "products_db";
@@ -15,47 +11,54 @@ $pass = "NuevaPassSegura_2025!!";
 $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4";
 
 try {
-    echo "1. Intentando conectar a SkySQL con el WRAPPER...\n";
+    echo "1. Conectando desde LOCAL a SKYSQL con PDO NATIVO...\n";
     echo "   Host: {$host}\n";
     echo "   Puerto: {$port}\n";
     echo "   Base de datos: {$dbname}\n";
     echo "   Usuario: {$user}\n\n";
     
-    $pdo = new PDO($dsn, $user, $pass);
-    echo "✅ Conexión exitosa con el WRAPPER PDO!\n\n";
+    // Opciones PDO para SSL
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ];
     
-    echo "2. Probando consulta simple...\n";
+    $pdo = new PDO($dsn, $user, $pass, $options);
+    echo "✅ Conexión LOCAL → SKYSQL con PDO NATIVO exitosa!\n\n";
+    
+    // Información de la BD
+    echo "2. Información de la base de datos...\n";
     $result = $pdo->query("SELECT DATABASE() as db, VERSION() as version");
     $row = $result->fetch();
-    echo "   Base de datos actual: {$row['db']}\n";
+    echo "   Base de datos: {$row['db']}\n";
     echo "   Versión MariaDB: {$row['version']}\n\n";
     
+    // Listar tablas
     echo "3. Listando tablas...\n";
     $result = $pdo->query("SHOW TABLES");
     $tables = $result->fetchAll();
-    if (count($tables) > 0) {
-        foreach ($tables as $table) {
-            echo "   - " . $table[0] . "\n";
-        }
-    } else {
-        echo "   (No hay tablas creadas aún)\n";
+    foreach ($tables as $table) {
+        $tableName = reset($table);
+        echo "   - {$tableName}\n";
+    }
+    echo "\n";
+    
+    // Consultar productos
+    echo "4. Consultando productos...\n";
+    $result = $pdo->query("SELECT * FROM products LIMIT 3");
+    $products = $result->fetchAll();
+    foreach ($products as $p) {
+        echo "   - {$p['name']} | €{$p['price']}\n";
     }
     
-    echo "\n4. Probando prepared statement...\n";
-    $stmt = $pdo->prepare("SELECT ? as test, ? as numero");
-    $stmt->execute(['¡Wrapper funciona!', 2025]);
-    $row = $stmt->fetch();
-    echo "   Test: {$row['test']}\n";
-    echo "   Número: {$row['numero']}\n";
+    echo "\n✅✅✅ PDO NATIVO FUNCIONA DESDE LOCAL A SKYSQL! ✅✅✅\n";
+    echo "Si esto funciona, NO NECESITAS EL WRAPPER.\n";
     
-    echo "\n✅✅✅ EL WRAPPER PDO FUNCIONA PERFECTAMENTE CON SKYSQL! ✅✅✅\n";
-    echo "Ahora tu código puede usar sintaxis PDO y por dentro usa MySQLi con SSL.\n";
-    
-} catch (Exception $e) {
-    echo "❌ ERROR: " . $e->getMessage() . "\n";
-    echo "Código: " . $e->getCode() . "\n";
-    echo "\n--- Stack trace ---\n";
-    echo $e->getTraceAsString() . "\n";
+} catch (PDOException $e) {
+    echo "❌ ERROR CON PDO NATIVO: " . $e->getMessage() . "\n";
+    echo "Código: " . $e->getCode() . "\n\n";
+    echo "Si este test FALLA, entonces SÍ necesitas el wrapper.\n";
 }
 
 echo "</pre>";
